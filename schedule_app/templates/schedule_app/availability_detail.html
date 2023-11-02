@@ -1,0 +1,31 @@
+{% extends "availability_app/base_template.html" %}
+<!-- Replace block content in base_template.html -->
+
+{% block content %}
+
+<head>
+<style>
+    .left-align {
+        text-align: left;
+    }
+    .availability-label {
+        display: inline-block;
+        width: 200px; /* Adjust the width as needed */
+    }
+</style>
+</head>
+<body>
+
+<div class="left-align">
+    <p><strong class="availability-label">Sunday:</strong> {{ availability.sunday_start }} - {{ availability.sunday_end}}</p>
+    <p><strong class="availability-label">Monday:</strong> {{ availability.monday_start }} - {{ availability.monday_end }}</p>
+    <p><strong class="availability-label">Tuesday:</strong> {{ availability.tuesday_start }} - {{ availability.tuesday_end }}</p>
+    <p><strong class="availability-label">Wednesday:</strong> {{ availability.wednesday_start }} - {{ availability.wednesday_end }}</p>
+    <p><strong class="availability-label">Thursday:</strong> {{ availability.thursday_start }} - {{ availability.thursday_end }}</p>
+    <p><strong class="availability-label">Friday:</strong> {{ availability.friday_start }} - {{ availability.friday_end }}</p>
+    <p><strong class="availability-label">Saturday:</strong> {{ availability.saturday_start }} - {{ availability.saturday_end }}</p>
+</div>
+
+</body>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "schedule_app/base_template.html" %}
+<!-- Replace block content in base_template.html -->
+
+{% block content %}
+<style>
+    .left-align {
+        text-align: left;
+    }
+    .availability-label {
+        display: inline-block;
+        width: 200px; /* Adjust the width as needed */
+    }
+</style>
+
+<h2>Employee: {{ employee.name }}</h2>
+
+<p><strong>Phone:</strong> {{ employee.phone }}</p>
+<p><strong>Status: </strong>{{ employee.status }}</p>
+<p><strong><u>Availability</u>:</strong></p>
+
+<div class="left-align">
+    <p><strong class="availability-label">Sunday:</strong> {{ employee.availability.sunday_start }} - {{ employee.availability.sunday_end }}</p>
+    <p><strong class="availability-label">Monday:</strong> {{ employee.availability.monday_start }} - {{ employee.availability.monday_end }}</p>
+    <p><strong class="availability-label">Tuesday:</strong> {{ employee.availability.tuesday_start }} - {{ employee.availability.tuesday_end }}</p>
+    <p><strong class="availability-label">Wednesday:</strong> {{ employee.availability.wednesday_start }} - {{ employee.availability.wednesday_end }}</p>
+    <p><strong class="availability-label">Thursday:</strong> {{ employee.availability.thursday_start }} - {{ employee.availability.thursday_end }}</p>
+    <p><strong class="availability-label">Friday:</strong> {{ employee.availability.friday_start }} - {{ employee.availability.friday_end }}</p>
+    <p><strong class="availability-label">Saturday:</strong> {{ employee.availability.saturday_start }} - {{ employee.availability.saturday_end }}</p>
+</div>
+
+
+<div>
+<p>No current Availability</p>
+
+</div>
+
+
+<a class="btn btn-primary" href="{% url 'update_availability' employee.id %}" role="button">Edit Availability</a>
+<p><strong><h3>Schedules:</h3></strong></p>
+
+<div class="col">
+    {% for schedule in schedule_list %}
+    {% if schedule.employee == employee %}
+    <div class="col-md-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ schedule.week }}</h5>
+                <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

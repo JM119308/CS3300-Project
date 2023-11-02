@@ -1,0 +1,17 @@
+{% extends 'portfolio_app/base_template.html' %}
+
+{% block content %}
+<h3>Are you sure you want to delete {{ project.title }}?</h3>
+<form action="" method="POST">
+
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<p>
+<a class="btn btn-primary" href="{% url 'portfolio-detail' project.portfolio.id %}" role="button">Cancel</a> 
+<input class="btn btn-danger" type="submit" name="Submit">
+</p>
+</form>
+
+{% endblock %}

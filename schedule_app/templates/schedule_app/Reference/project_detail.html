@@ -1,0 +1,18 @@
+{% extends 'portfolio_app/base_template.html' %}
+
+{% block content %}
+<h1>Project Title: {{ project.title }}</h1>
+
+<p>Project Description:</p>
+{{project.description}} 
+<p>
+	<a class="btn btn-secondary" href="{% url 'portfolio-detail' project.portfolio.id %}"role="button">Return
+	</a>  
+	<a class="btn btn-primary" href="{% url 'update_project' project.id %}"role="button">Edit
+	</a>  
+	<a class="btn btn-warning" href="{% url 'delete_project' project.id %}" role="button">Delete
+	</a>
+</p>
+
+{% endblock %}
+

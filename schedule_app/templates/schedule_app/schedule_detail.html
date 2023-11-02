@@ -1,0 +1,32 @@
+{% extends "schedule_app/base_template.html" %}
+<!-- Replace block content in base_template.html -->
+
+{% block content %}
+
+<head>
+<style>
+    .left-align {
+        text-align: left;
+    }
+    .schedule-label {
+        display: inline-block;
+        width: 200px; /* Adjust the width as needed */
+    }
+</style>
+</head>
+<body>
+
+<div class="left-align">
+    <p><strong class="schedule-label"><u>Schedule for Week:</strong></u> {{ schedule.week }}</p>
+    <p><strong class="schedule-label">Sunday:</strong> {{ schedule.sunday_start }} - {{ schedule.sunday_end}}</p>
+    <p><strong class="schedule-label">Monday:</strong> {{ schedule.monday_start }} - {{ schedule.monday_end }}</p>
+    <p><strong class="schedule-label">Tuesday:</strong> {{ schedule.tuesday_start }} - {{ schedule.tuesday_end }}</p>
+    <p><strong class="schedule-label">Wednesday:</strong> {{ schedule.wednesday_start }} - {{ schedule.wednesday_end }}</p>
+    <p><strong class="schedule-label">Thursday:</strong> {{ schedule.thursday_start }} - {{ schedule.thursday_end }}</p>
+    <p><strong class="schedule-label">Friday:</strong> {{ schedule.friday_start }} - {{ schedule.friday_end }}</p>
+    <p><strong class="schedule-label">Saturday:</strong> {{ schedule.saturday_start }} - {{ schedule.saturday_end }}</p>
+</div>
+
+</body>
+
+{% endblock %}
