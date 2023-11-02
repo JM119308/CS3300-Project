@@ -19,10 +19,7 @@ class EmployeeDetailView(generic.DetailView):
     model = Employee
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        availability_instance = AvailabilityListView()
-        availability = availability_instance.get_queryset()       
+        context = super().get_context_data(**kwargs)   
 
         schedule_list_instance = ScheduleListView()
         schedule_list = schedule_list_instance.get_queryset()
@@ -45,7 +42,22 @@ class AvailabilityDetailView(generic.DetailView):
 class AvailabilityListView(generic.ListView):
    model = Availability
 
+class WeekListView(generic.ListView):
+    model = Week
 
+class WeekDetailView(generic.DetailView):
+    model = Week
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        week_instance = WeekListView()
+        week = week_instance.get_queryset()       
+
+
+        context['week_list'] = week_list
+
+        return context
 
 def updateAvailability(request, employee_id):
     employee = get_object_or_404(Employee, pk=employee_id)
@@ -64,28 +76,21 @@ def updateAvailability(request, employee_id):
     return render(request, 'schedule_app/update_availability.html', context)
 
 
-def createAvailability(request, employee_id):
-    form = AvailabilityForm()
-    employee = Employee.objects.get(pk=employee_id)
+def createWeek(request):
+    form = WeekForm()
     
     if request.method == 'POST':
-        # Create a new dictionary with form data and employee_id
-        availability_data = request.POST.copy()
-        availability_data['employee_id'] = employee_id
         
-        form = AvailabilityForm(availability_data)
         if form.is_valid():
             # Save the form without committing to the database
-            availability = form.save(commit=False)
-            # Set the employee relationship
-            availability.employee = employee
-            availability.save()
+            week = form.save(commit=False)
+            week.save()
 
-            # Redirect back to the employee detail page
-            return redirect('employee-detail', employee_id)
+            # Redirect back to the weeks page
+            return redirect('weeks')
 
     context = {'form': form}
-    return render(request, 'schedule_app/create_availability.html', context)
+    return render(request, 'schedule_app/create_week.html', context)
 
 #def Calendar(generic.DetailView) Calendar view feature comming soon
 
@@ -93,3 +98,8 @@ def index(request):
 
 # Render the HTML template index.html with the data in the context variable.
    return render( request, 'schedule_app/index.html')
+
+def manager(request):
+
+# Render the HTML template index.html with the data in the context variable.
+   return render( request, 'schedule_app/manager_home.html')

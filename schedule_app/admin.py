@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Employee)
 admin.site.register(Schedule)
 admin.site.register(Availability)
+admin.site.register(Week)

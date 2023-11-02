@@ -46,12 +46,20 @@ class Employee(models.Model):
 	def get_absolute_url(self):
 		return reverse('employee-detail', args=[str(self.id)])	
 
+class Week(models.Model):
+	weekDate = models.CharField(max_length = 200)
+
+	def __str__(self):
+		return self.weekDate
+
+	def get_absolute_url(self):
+		return reverse('week-detail', args=[str(self.id)])
 
 class Schedule(models.Model):
 
-	employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default = None)
+	week = models.ForeignKey(Week, on_delete=models.CASCADE, default = None)
 
-	week = models.CharField(max_length = 200)
+	employee = models.ForeignKey(Employee, on_delete=models.CASCADE, default = None)
 
 	sunday_start = models.CharField(max_length=200, choices=TIMES, blank = True)
 	sunday_end = models.CharField(max_length=200, choices=TIMES, blank = True)
@@ -70,7 +78,7 @@ class Schedule(models.Model):
 
 
 	def __str__(self):
-		return self.week
+		return self.employee.name + " " + self.week.weekDate
 	def get_absolute_url(self):
 		return reverse('schedule-detail', args=[str(self.id)])	
 
