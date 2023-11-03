@@ -3,7 +3,7 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
-<h3>Are you sure you want to delete week( {{ week.weekDate }} ) and is schedules?</h3>
+<h3>Are you sure you want to delete {{ schedule.employee.name }}'s schedule for week({{schedule.week.weekDate}})?</h3>
 <form action="" method="POST">
 
 {% csrf_token %}
@@ -11,7 +11,7 @@
 {{ form.as_table }}
 </table>
 <p>
-<a class="btn btn-primary" href="{% url 'weeks' %}" role="button">Cancel</a> 
+<a class="btn btn-primary" href="{% url 'week-detail' schedule.week.id %}" role="button">Cancel</a> 
 <input class="btn btn-danger" type="submit" name="Submit">
 </p>
 </form>

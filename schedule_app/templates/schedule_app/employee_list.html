@@ -4,11 +4,19 @@
 <h1>Employees</h1>
 {% if employee_list %}
 <ul>
-{% for employee in employee_list %}
-<li>
-<a href="{{ employee.get_absolute_url }}">{{ employee.name }}</a>
-</li>
-{% endfor %}
+<div class="col">
+    {% for employee in employee_list %}
+
+    <div class="col-md-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ employee.name }}</h5>
+                <p><a class="btn btn-primary" href="{{ employee.get_absolute_url }}" role="button">View</a></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 </ul>
 {% else %}
 <p>There are no employees registered.</p>

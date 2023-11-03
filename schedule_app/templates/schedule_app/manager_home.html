@@ -2,6 +2,16 @@
 <!-- Replace block content in base_template.html -->
 
 {% block content %}
+<ul>
 <h1>Manager Dashboard</h1>
-<a href= "{% url 'employees' %}" > Weeks </a>
+
+<div class="col-md-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Manage Schedules</h5>
+                <p><a class="btn btn-primary" href="{% url 'weeks' %}" role="button">Go</a></p>
+            </div>
+        </div>
+    </div>
+</ul>
 {% endblock %}

@@ -3,16 +3,18 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
-<h2>Update Availability</h2>
+<h2>Update {{schedule.employee.name}}'s Schedule </h2>
 <form action="" method="POST">
 
 {% csrf_token %}
 <table>
 {{ form.as_table }}
 </table>
-<a class="btn btn-secondary" href="{% url 'employee-detail' employee.availability.id %}" role="button">Cancel</a> 
-<input type="submit" name="Submit">
+<p>
 
+
+<input class="btn btn-danger" type="submit" name="Submit">
+</p>
 </form>
 
 {% endblock %}

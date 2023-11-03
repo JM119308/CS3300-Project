@@ -12,12 +12,11 @@
     }
 </style>
 
-<h2>Week: {{ schedule.name }} </h2>
+<h2>Week: {{ week.weekDate }} </h2>
 
 
-<a class="btn btn-primary" href="{% url 'update_availability' employee.id %}" role="button">Edit Availability</a>
 <p><strong><h3>Schedules:</h3></strong></p>
-
+<p><a class="btn btn-secondary" href="{% url 'weeks'%}" role="button">Back</a> <a class="btn btn-secondary" href="{% url 'create_schedule' week.pk %}" role="button">Create</a></p>
 <div class="col">
     {% for schedule in schedule_list %}
     {% if schedule.week == week %}
@@ -25,7 +24,9 @@
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title">{{ schedule.employee.name }}</h5>
-                <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a></p>
+                <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a>
+                <a class="btn btn-warning" href="{% url 'update_schedule' schedule.id %}" role="button">Edit</a>
+                <a class="btn btn-danger" href="{% url 'delete_schedule' schedule.id %}" role="button">Delete</a></p>
             </div>
         </div>
     </div>

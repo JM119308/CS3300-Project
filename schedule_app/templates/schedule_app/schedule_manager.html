@@ -18,8 +18,8 @@
 
 <div class="left-align">
     
-     <ul><p><strong class="schedule-label"><u>Schedule for Week:</strong></u>    {{ schedule.week }}</p>
-   
+    <p><strong class="schedule-label"><u>Schedule for Week:</strong></u> {{ schedule.week }}</p>
+    <ul>
     <li><p><strong class="schedule-label">Sunday:</strong> {{ schedule.sunday_start }} - {{ schedule.sunday_end}}</p></li>
     <li><p><strong class="schedule-label">Monday:</strong> {{ schedule.monday_start }} - {{ schedule.monday_end }}</p></li>
     <li><p><strong class="schedule-label">Tuesday:</strong> {{ schedule.tuesday_start }} - {{ schedule.tuesday_end }}</p></li>
@@ -29,7 +29,7 @@
     <li><p><strong class="schedule-label">Saturday:</strong> {{ schedule.saturday_start }} - {{ schedule.saturday_end }}</p></li>
     </ul>
 </div>
-
+<a class="btn btn-primary" href=# role="button">Edit</a>
 </body>
 
 {% endblock %}

@@ -25,13 +25,15 @@ class EmployeeDetailView(generic.DetailView):
         schedule_list = schedule_list_instance.get_queryset()
 
         context['schedule_list'] = schedule_list
-        context['availability'] = availability  # Add the availability to the context
+        #context['availability'] = availability  # Add the availability to the context
 
         return context
 
 
 class ScheduleListView(generic.ListView):
    model = Schedule
+
+
 
 class ScheduleDetailView(generic.DetailView):
    model = Schedule
@@ -51,11 +53,11 @@ class WeekDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        week_instance = WeekListView()
-        week = week_instance.get_queryset()       
+        schedule_instance = ScheduleDetailView()
+        schedule_list = schedule_instance.get_queryset()       
 
 
-        context['week_list'] = week_list
+        context['schedule_list'] = schedule_list
 
         return context
 
@@ -76,21 +78,76 @@ def updateAvailability(request, employee_id):
     return render(request, 'schedule_app/update_availability.html', context)
 
 
+
+
 def createWeek(request):
-    form = WeekForm()
-    
     if request.method == 'POST':
-        
+        form = WeekForm(request.POST)
         if form.is_valid():
-            # Save the form without committing to the database
-            week = form.save(commit=False)
-            week.save()
+            form.save()
+            return redirect('weeks')  # Redirect to a success URL after creating the week
+    else:
+        form = WeekForm()
+    return render(request, 'schedule_app/create_week.html', {'form': form})
 
-            # Redirect back to the weeks page
-            return redirect('weeks')
+def updateWeek(request, pk):
+    week_instance = get_object_or_404(Week, pk=pk)
+    if request.method == 'POST':
+        form = WeekForm(request.POST, instance=week_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('weeks')  # Redirect to a success URL after updating the week
+    else:
+        form = WeekForm(instance=week_instance)
+    return render(request, 'schedule_app/update_week.html', {'form': form})
 
-    context = {'form': form}
-    return render(request, 'schedule_app/create_week.html', context)
+def deleteWeek(request, pk):
+    week_instance = get_object_or_404(Week, pk=pk)
+    if request.method == 'POST':
+        week_instance.delete()
+        return redirect('weeks')  # Redirect to a success URL after deleting the week
+    return render(request, 'schedule_app/delete_week.html', {'week': week_instance})
+
+def createSchedule(request, week_id):
+    form = ScheduleForm()
+    week = Week.objects.get(pk=week_id)
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('week-detail', pk = week_id)  # Redirect to a success URL after creating the week
+    else:
+        form = ScheduleForm()
+
+    return render(request, 'schedule_app/create_schedule.html', {'form': form})
+
+
+
+def updateSchedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, pk=schedule_id)
+    week_id = schedule.week.pk
+    if request.method == 'POST':
+        form = ScheduleForm(request.POST, instance=schedule)
+        if form.is_valid():
+            form.save()
+            return redirect('week-detail', pk = week_id)  # Redirect to a success URL after updating the week
+    else:
+        form = ScheduleForm(instance=schedule)
+    return render(request, 'schedule_app/update_schedule.html', {'form': form})
+
+
+def deleteSchedule(request, schedule_id):
+    schedule = get_object_or_404(Schedule, pk=schedule_id)
+    week_id = schedule.week.pk
+
+    if request.method == 'POST':
+        schedule.delete()
+        # Redirect back to the portfolio detail page
+        return redirect('week-detail', pk=week_id)
+
+    context = {'schedule': schedule}
+    return render(request, 'schedule_app/delete_schedule.html', context)
+
 
 #def Calendar(generic.DetailView) Calendar view feature comming soon
 
@@ -101,5 +158,5 @@ def index(request):
 
 def manager(request):
 
-# Render the HTML template index.html with the data in the context variable.
-   return render( request, 'schedule_app/manager_home.html')
+
+    return render( request, 'schedule_app/manager_home.html')

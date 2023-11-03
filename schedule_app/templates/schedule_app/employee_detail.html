@@ -13,11 +13,12 @@
 </style>
 
 <h2>Employee: {{ employee.name }}</h2>
-
+<ul>
 <p><strong>Phone:</strong> {{ employee.phone }}</p>
 <p><strong>Status: </strong>{{ employee.status }}</p>
-<p><strong><u>Availability</u>:</strong></p>
-
+</ul>
+<p><h3>Preferred Availability:</h3></p>
+<ul>
 <div class="left-align">
     <p><strong class="availability-label">Sunday:</strong> {{ employee.availability.sunday_start }} - {{ employee.availability.sunday_end }}</p>
     <p><strong class="availability-label">Monday:</strong> {{ employee.availability.monday_start }} - {{ employee.availability.monday_end }}</p>
@@ -30,14 +31,14 @@
 
 
 <div>
-<p>No current Availability</p>
 
 </div>
 
 
 <a class="btn btn-primary" href="{% url 'update_availability' employee.id %}" role="button">Edit Availability</a>
+</ul>
 <p><strong><h3>Schedules:</h3></strong></p>
-
+<ul>
 <div class="col">
     {% for schedule in schedule_list %}
     {% if schedule.employee == employee %}
@@ -52,5 +53,5 @@
     {% endif %}
     {% endfor %}
 </div>
-
+</ul>
 {% endblock %}

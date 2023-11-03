@@ -2,15 +2,28 @@
 
 {% block content %}
 <h1>Weeks</h1>
+<p><a class="btn btn-secondary" href="{% url 'manager' %}" role="button">Back to Dashboard</a> 
+    <a class="btn btn-warning" href="{% url 'create_week' %}" role="button">Create</a></p>
 {% if week_list %}
 <ul>
-{% for week in week_list %}
-<li>
-<a href="{{ employee.get_absolute_url }}">{{ week.week }}</a>
-</li>
-{% endfor %}
+<div class="col">
+    {% for week in week_list %}
+ 
+    <div class="col-md-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ week.weekDate }}</h5>
+                <p><a class="btn btn-primary" href="{{ week.get_absolute_url }}" role="button">View</a>
+                <a class="btn btn-secondary" href="{% url 'update_week' week.id %}" role="button">Edit</a>
+            	<a class="btn btn-danger" href="{% url 'delete_week' week.id %}" role="button">Delete</a></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 </ul>
 {% else %}
 <p>There are no weeks.</p>
 {% endif %}
 {% endblock %}
+
