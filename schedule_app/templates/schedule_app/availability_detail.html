@@ -1,4 +1,4 @@
-{% extends "availability_app/base_template.html" %}
+{% extends "schedule_app/base_template.html" %}
 <!-- Replace block content in base_template.html -->
 
 {% block content %}
@@ -16,15 +16,24 @@
 </head>
 <body>
 
+{% for employee in employee_list %}
+{% if availability == employee.availability%}
+<h2> {{employee.name}}'s availability</h2>
+{% endif %}
+{% endfor %}
+<p></p>
+
+<ul>
 <div class="left-align">
-    <p><strong class="availability-label">Sunday:</strong> {{ availability.sunday_start }} - {{ availability.sunday_end}}</p>
-    <p><strong class="availability-label">Monday:</strong> {{ availability.monday_start }} - {{ availability.monday_end }}</p>
-    <p><strong class="availability-label">Tuesday:</strong> {{ availability.tuesday_start }} - {{ availability.tuesday_end }}</p>
-    <p><strong class="availability-label">Wednesday:</strong> {{ availability.wednesday_start }} - {{ availability.wednesday_end }}</p>
-    <p><strong class="availability-label">Thursday:</strong> {{ availability.thursday_start }} - {{ availability.thursday_end }}</p>
-    <p><strong class="availability-label">Friday:</strong> {{ availability.friday_start }} - {{ availability.friday_end }}</p>
-    <p><strong class="availability-label">Saturday:</strong> {{ availability.saturday_start }} - {{ availability.saturday_end }}</p>
+    <li><p><strong class="availability-label">Sunday:</strong> {{ availability.sunday_start }} - {{ availability.sunday_end}}</p></li>
+    <li><p><strong class="availability-label">Monday:</strong> {{ availability.monday_start }} - {{ availability.monday_end }}</p></li>
+    <li><p><strong class="availability-label">Tuesday:</strong> {{ availability.tuesday_start }} - {{ availability.tuesday_end }}</p></li>
+    <li><p><strong class="availability-label">Wednesday:</strong> {{ availability.wednesday_start }} - {{ availability.wednesday_end }}</p></li>
+   <li><p><strong class="availability-label">Thursday:</strong> {{ availability.thursday_start }} - {{ availability.thursday_end }}</p></li>
+    <li><p><strong class="availability-label">Friday:</strong> {{ availability.friday_start }} - {{ availability.friday_end }}</p></li>
+    <li><p><strong class="availability-label">Saturday:</strong> {{ availability.saturday_start }} - {{ availability.saturday_end }}</p></li>
 </div>
+</ul>
 
 </body>
 

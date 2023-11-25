@@ -10,8 +10,8 @@
     {% for week in week_list %}
  
     <div class="col-md-3">
-        <div class="card my-3">
-            <div class="card-body">
+        <div class="card my-3" >
+            <div class="card-body " >
                 <h5 class="card-title">{{ week.weekDate }}</h5>
                 <p><a class="btn btn-primary" href="{{ week.get_absolute_url }}" role="button">View</a>
                 <a class="btn btn-secondary" href="{% url 'update_week' week.id %}" role="button">Edit</a>

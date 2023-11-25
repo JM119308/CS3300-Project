@@ -16,9 +16,11 @@
 </head>
 <body>
 
+<h2> {{schedule.employee.name}}'s schedule</h2>
+<p></p>
 <div class="left-align">
     
-     <ul><p><strong class="schedule-label"><u>Schedule for Week:</strong></u>    {{ schedule.week }}</p>
+     <ul><p><strong class="schedule-label"><u>Week:</strong></u>    {{ schedule.week }}</p>
    
     <li><p><strong class="schedule-label">Sunday:</strong> {{ schedule.sunday_start }} - {{ schedule.sunday_end}}</p></li>
     <li><p><strong class="schedule-label">Monday:</strong> {{ schedule.monday_start }} - {{ schedule.monday_end }}</p></li>

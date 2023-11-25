@@ -1,5 +1,7 @@
 from django.forms import ModelForm
 from .models import *
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class AvailabilityForm(ModelForm):
 	class Meta:
@@ -20,7 +22,16 @@ class ScheduleForm(ModelForm):
 			'wednesday_start', 'wednesday_end', 'thursday_start', 'thursday_end', 
 			'friday_start', 'friday_end', 'saturday_start', 'saturday_end')
 
+class CreateUserForm(UserCreationForm):
+	class Meta:
+		model = User
+		fields = ['username', 'email', 'password1','password2']
 
+class EmployeeForm(ModelForm):
+	class Meta:
+		model = Employee
+		fields = '__all__'
+		exclude = ['user', 'availability']
 
 	#Prefill week into the form
 	'''def __init__(self, *args, **kwargs):

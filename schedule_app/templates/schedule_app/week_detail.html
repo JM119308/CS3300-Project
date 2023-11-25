@@ -23,9 +23,10 @@
     <div class="col-md-3">
         <div class="card my-3">
             <div class="card-body">
-                <h5 class="card-title">{{ schedule.employee.name }}</h5>
+                <h5 class="card-title">{{ schedule.employee.name }}'s schedule</h5>
                 <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a>
                 <a class="btn btn-warning" href="{% url 'update_schedule' schedule.id %}" role="button">Edit</a>
+                <a class="btn btn-success" href="{% url 'availability-detail' schedule.employee.availability.id %}" role="button">Availability</a>
                 <a class="btn btn-danger" href="{% url 'delete_schedule' schedule.id %}" role="button">Delete</a></p>
             </div>
         </div>

@@ -22,4 +22,8 @@ path('update_week/<int:pk>', views.updateWeek, name='update_week'),
 path('availability/<int:pk>', views.AvailabilityDetailView.as_view(), name='availability-detail'),
 path('availability/<int:employee_id>/update/', views.updateAvailability, name='update_availability'),
 
+
+path('accounts/register/', views.registerPage, name = 'register_page'), 
+
+
 ]

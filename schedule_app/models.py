@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from .times import *
+from django.contrib.auth.models import User
 
 # Create your models here.
 	
@@ -30,11 +31,12 @@ class Availability(models.Model):
 		return reverse('availability-detail', args=[str(self.id)])
 
 class Employee(models.Model):
-	availability = models.ForeignKey(Availability, on_delete=models.CASCADE, default = None)
+	user = models.OneToOneField(User, null = True, on_delete = models.CASCADE)
+	availability = models.OneToOneField(Availability, null = True, on_delete=models.CASCADE, unique = True, default = None)
 
 	STATUS = (
 	('Full-Time','Full-time'),
-	('Part-Time', 'Part-time')
+	('Part-Time', 'Part-time')  
 	)
 	name = models.CharField(max_length = 200)
 	phone = models.CharField(max_length = 200)

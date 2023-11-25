@@ -7,14 +7,17 @@ from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from .forms import *
 from .models import *
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .decorators import allowed_users
 # Create your views here.
 
 
-
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class EmployeeListView(generic.ListView):
    model = Employee
 
-
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class EmployeeDetailView(generic.DetailView):
     model = Employee
 
@@ -25,28 +28,41 @@ class EmployeeDetailView(generic.DetailView):
         schedule_list = schedule_list_instance.get_queryset()
 
         context['schedule_list'] = schedule_list
-        #context['availability'] = availability  # Add the availability to the context
 
         return context
 
-
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class ScheduleListView(generic.ListView):
    model = Schedule
 
 
-
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class ScheduleDetailView(generic.DetailView):
    model = Schedule
 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class AvailabilityDetailView(generic.DetailView):
    model = Availability
+   def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)   
 
+        employee_list_instance = EmployeeListView()
+        employee_list = employee_list_instance.get_queryset()
+
+        context['employee_list'] = employee_list
+
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class AvailabilityListView(generic.ListView):
    model = Availability
-
+   
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class WeekListView(generic.ListView):
     model = Week
 
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class WeekDetailView(generic.DetailView):
     model = Week
 
@@ -61,6 +77,9 @@ class WeekDetailView(generic.DetailView):
 
         return context
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['employee'])
 def updateAvailability(request, employee_id):
     employee = get_object_or_404(Employee, pk=employee_id)
     availability, created = Availability.objects.get_or_create(employee=employee)
@@ -79,7 +98,8 @@ def updateAvailability(request, employee_id):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def createWeek(request):
     if request.method == 'POST':
         form = WeekForm(request.POST)
@@ -90,6 +110,8 @@ def createWeek(request):
         form = WeekForm()
     return render(request, 'schedule_app/create_week.html', {'form': form})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def updateWeek(request, pk):
     week_instance = get_object_or_404(Week, pk=pk)
     if request.method == 'POST':
@@ -101,6 +123,9 @@ def updateWeek(request, pk):
         form = WeekForm(instance=week_instance)
     return render(request, 'schedule_app/update_week.html', {'form': form})
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def deleteWeek(request, pk):
     week_instance = get_object_or_404(Week, pk=pk)
     if request.method == 'POST':
@@ -108,6 +133,8 @@ def deleteWeek(request, pk):
         return redirect('weeks')  # Redirect to a success URL after deleting the week
     return render(request, 'schedule_app/delete_week.html', {'week': week_instance})
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def createSchedule(request, week_id):
     form = ScheduleForm()
     week = Week.objects.get(pk=week_id)
@@ -122,7 +149,8 @@ def createSchedule(request, week_id):
     return render(request, 'schedule_app/create_schedule.html', {'form': form})
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def updateSchedule(request, schedule_id):
     schedule = get_object_or_404(Schedule, pk=schedule_id)
     week_id = schedule.week.pk
@@ -136,6 +164,9 @@ def updateSchedule(request, schedule_id):
     return render(request, 'schedule_app/update_schedule.html', {'form': form})
 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def deleteSchedule(request, schedule_id):
     schedule = get_object_or_404(Schedule, pk=schedule_id)
     week_id = schedule.week.pk
@@ -156,7 +187,43 @@ def index(request):
 # Render the HTML template index.html with the data in the context variable.
    return render( request, 'schedule_app/index.html')
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager'])
 def manager(request):
 
 
     return render( request, 'schedule_app/manager_home.html')
+
+def registerPage(request):
+
+    form = CreateUserForm(request.POST)
+    if form.is_valis():
+        user = form.save()
+        username = form.cleaned_data.get('username')
+        group = Group.objects.get(name = 'student')
+        user.groups.add(group)
+        employee = Empoyee.objects.create(user = user,)
+        availability = Availability.objects.create()
+        employee.availability = availability
+        employee.save()
+
+        messages.success(request, 'Account was created for ' + username)
+        return redirect('login')
+
+    context ={'form':form}
+    return render(request, 'registration/register.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['employee'])
+def userPage(request):
+    employee = request.user.employee
+    form = EmployeeForm(instance = employee)
+    print('employee', employee)
+    availability = employee.availability
+    print(availability)
+    if request.method == 'POST':
+        form = StudentForm(request.POST, request.FILES, instance=employee)
+        if form.is_valid():
+            form.save()
+    context = {'availability': availability, 'form':form}
+    return render(request,'scheduling_app/user.html', context)
