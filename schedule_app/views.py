@@ -10,10 +10,17 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .decorators import allowed_users
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
+from django.contrib import messages
+from .forms import CreateUserForm
+
+
 # Create your views here.
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['manager_role']), name='dispatch')
 class EmployeeListView(generic.ListView):
    model = Employee
 
@@ -57,7 +64,7 @@ class AvailabilityDetailView(generic.DetailView):
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AvailabilityListView(generic.ListView):
    model = Availability
-   
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class WeekListView(generic.ListView):
     model = Week
@@ -79,7 +86,6 @@ class WeekDetailView(generic.DetailView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['employee'])
 def updateAvailability(request, employee_id):
     employee = get_object_or_404(Employee, pk=employee_id)
     availability, created = Availability.objects.get_or_create(employee=employee)
@@ -99,7 +105,7 @@ def updateAvailability(request, employee_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def createWeek(request):
     if request.method == 'POST':
         form = WeekForm(request.POST)
@@ -111,7 +117,7 @@ def createWeek(request):
     return render(request, 'schedule_app/create_week.html', {'form': form})
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def updateWeek(request, pk):
     week_instance = get_object_or_404(Week, pk=pk)
     if request.method == 'POST':
@@ -125,7 +131,7 @@ def updateWeek(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def deleteWeek(request, pk):
     week_instance = get_object_or_404(Week, pk=pk)
     if request.method == 'POST':
@@ -134,7 +140,7 @@ def deleteWeek(request, pk):
     return render(request, 'schedule_app/delete_week.html', {'week': week_instance})
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def createSchedule(request, week_id):
     form = ScheduleForm()
     week = Week.objects.get(pk=week_id)
@@ -150,7 +156,7 @@ def createSchedule(request, week_id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def updateSchedule(request, schedule_id):
     schedule = get_object_or_404(Schedule, pk=schedule_id)
     week_id = schedule.week.pk
@@ -161,12 +167,12 @@ def updateSchedule(request, schedule_id):
             return redirect('week-detail', pk = week_id)  # Redirect to a success URL after updating the week
     else:
         form = ScheduleForm(instance=schedule)
-    return render(request, 'schedule_app/update_schedule.html', {'form': form})
+    return render(request, 'schedule_app/update_schedule.html', {'form': form, 'week': schedule.week})
 
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def deleteSchedule(request, schedule_id):
     schedule = get_object_or_404(Schedule, pk=schedule_id)
     week_id = schedule.week.pk
@@ -188,22 +194,24 @@ def index(request):
    return render( request, 'schedule_app/index.html')
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['manager'])
+@allowed_users(allowed_roles=['manager_role'])
 def manager(request):
 
 
     return render( request, 'schedule_app/manager_home.html')
 
+'''@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager_role'])
 def registerPage(request):
 
     form = CreateUserForm(request.POST)
-    if form.is_valis():
+    if form.is_valid():
         user = form.save()
         username = form.cleaned_data.get('username')
-        group = Group.objects.get(name = 'student')
+        group = Group.objects.get(name = 'employee_role')
         user.groups.add(group)
-        employee = Empoyee.objects.create(user = user,)
         availability = Availability.objects.create()
+        employee = Employee.objects.create(user = user)
         employee.availability = availability
         employee.save()
 
@@ -211,10 +219,58 @@ def registerPage(request):
         return redirect('login')
 
     context ={'form':form}
-    return render(request, 'registration/register.html', context)
+    return render(request, 'registration/register.html', context)'''
+
+'''def registerPage(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Handle successful registration, e.g., redirect to login page
+            return redirect('employees')
+    else:
+        form = CreateUserForm()
+
+    return render(request, 'registration/register.html', {'form': form})'''
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager_role'])
+def registerPage(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+
+            # Create an Employee instance and link it to the user
+            employee, created = Employee.objects.get_or_create(user=user, defaults={'name': form.cleaned_data['employee_name']})
+            print("New Employee created:", employee)
+            
+            # Print for debugging
+            print("New Employee created:", employee)
+
+            # Create an Availability instance and link it to the employee if it's a new employee
+            availability = Availability.objects.create(owner=user.username)
+
+            # Print for debugging
+            print("New Availability created:", availability)
+
+            employee.availability = availability
+            employee.save()
+
+            # Assign the user to the 'employee_role' group
+            group = Group.objects.get(name='employee_role')
+            user.groups.add(group)
+
+            # Save the user now that the employee is linked
+            user.save()
+
+            # Redirect to the desired page after successful registration
+            return redirect('employees')
+    else:
+        form = CreateUserForm()
+
+    return render(request, 'registration/register.html', {'form': form})
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['employee'])
 def userPage(request):
     employee = request.user.employee
     form = EmployeeForm(instance = employee)
@@ -222,8 +278,8 @@ def userPage(request):
     availability = employee.availability
     print(availability)
     if request.method == 'POST':
-        form = StudentForm(request.POST, request.FILES, instance=employee)
+        form = EmployeeForm(request.POST, request.FILES, instance=employee)
         if form.is_valid():
             form.save()
     context = {'availability': availability, 'form':form}
-    return render(request,'scheduling_app/user.html', context)
+    return render(request,'schedule_app/user.html', context)

@@ -3,5 +3,7 @@
 
 {% block content %}
 <h1>Welcome to the Scheduler 5000</h1>
-
+{% if user.is_authenticated %}
+<p> View Upcomming Weeks</p>
+{% endif %}
 {% endblock %}

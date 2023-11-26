@@ -2,6 +2,8 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load custom_tags %}
+
 <!DOCTYPE html >
 <html lang="en">
 <head>
@@ -38,25 +40,40 @@
 <ul class="navbar-nav">
 <li class="nav-item">
 
+
+
+{% if user.is_authenticated %}
+{% if user|has_group:"manager_role" %}
+<a class="nav-link" href="{% url 'manager' %}">Home</a> 
+</li>
+{% else %}
+<a class="nav-link" href="{% url 'weeks' %}">Home</a> 
+</li>
+{% endif %}
+<li class="nav-item">
+<a class="nav-link" href="{% url 'user_page' %}" >Profile</a>
+</li> 
+{% else %}
+
 <a class="nav-link" href="{% url 'index' %}">Home</a>
 </li>
-
 <li class="nav-item">
-<a class="nav-link" href="{% url 'employees' %}" >Employees</a>
-</li>
+<a class="nav-link" href="{%url 'login' %}?next={% url 'user_page' %}" >Profile</a>
+</li> 
+{% endif  %}
 
-<li class="nav-item">
-<a class="nav-link" href="{% url 'manager' %}">Managers Only</a>
-</li>
+
+
 {% if user.is_authenticated %}
 <li>
-<a class ="nav-link" href="{%url 'logout' %}?next={{request.path}}">Logout {{user}}</a>
+<a class ="nav-link" href="{%url 'logout' %}?next={% url 'weeks' %}">Logout {{user}}</a>
 </li>
 {% else %}
 <li>
-<a class ="nav-link" href="{%url 'login' %}?next={{request.path}}">Login </a>
-{% endif  %}
+<a class ="nav-link" href="{%url 'login' %}?next={% url 'user_page' %}">Login </a>
 </li>
+{% endif  %}
+
 	<li class="form-check form-switch mx-4">
 	<p>Dark Mode<input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked"  onclick="toggleFunction()">
 	</p>

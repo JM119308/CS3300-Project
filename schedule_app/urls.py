@@ -24,6 +24,6 @@ path('availability/<int:employee_id>/update/', views.updateAvailability, name='u
 
 
 path('accounts/register/', views.registerPage, name = 'register_page'), 
-
+path('user/', views.userPage, name = 'user_page'),
 
 ]

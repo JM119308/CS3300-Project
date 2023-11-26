@@ -1,18 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from functools import wraps
 
-def allowed_users(allowed_roles =[]):
-	def decorator(view_func):
-		def wrapper_func(request, *args, **kwargs):
-
-			print('role', allowed_roles)
-			gorup = None
-			if request.user.groups.exists():
-				group = request.user.groups.all()[0].name 
-			if group in allowed_roles:
-				return view_func(request, *args, **kwargs)
-				
-			else:
-					return HttpResponse('You do not have permission to access this page')
-		return wrapper_func
-	return decorator
+def allowed_users(allowed_roles=[]):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            if request.user.groups.filter(name__in=allowed_roles).exists():
+                return view_func(request, *args, **kwargs)
+            else:
+                # Redirect to login or a forbidden page
+                return redirect('login')  # Adjust the URL as needed
+        return wrapper
+    return decorator

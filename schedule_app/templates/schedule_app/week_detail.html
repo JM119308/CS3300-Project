@@ -1,5 +1,5 @@
 {% extends "schedule_app/base_template.html" %}
-<!-- Replace block content in base_template.html -->
+{% load custom_tags %}
 
 {% block content %}
 <style>
@@ -16,7 +16,11 @@
 
 
 <p><strong><h3>Schedules:</h3></strong></p>
-<p><a class="btn btn-secondary" href="{% url 'weeks'%}" role="button">Back</a> <a class="btn btn-secondary" href="{% url 'create_schedule' week.pk %}" role="button">Create</a></p>
+<p><a class="btn btn-secondary" href="{% url 'weeks'%}" role="button">Back</a> 
+{% if user|has_group:"manager_role" %}
+<a class="btn btn-secondary" href="{% url 'create_schedule' week.pk %}" role="button">Create</a>
+</p>
+{% endif %}
 <div class="col">
     {% for schedule in schedule_list %}
     {% if schedule.week == week %}
@@ -25,9 +29,12 @@
             <div class="card-body">
                 <h5 class="card-title">{{ schedule.employee.name }}'s schedule</h5>
                 <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a>
+                    
+                {% if user|has_group:"manager_role" %}
                 <a class="btn btn-warning" href="{% url 'update_schedule' schedule.id %}" role="button">Edit</a>
                 <a class="btn btn-success" href="{% url 'availability-detail' schedule.employee.availability.id %}" role="button">Availability</a>
                 <a class="btn btn-danger" href="{% url 'delete_schedule' schedule.id %}" role="button">Delete</a></p>
+                {% endif %}
             </div>
         </div>
     </div>

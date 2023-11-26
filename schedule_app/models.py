@@ -31,8 +31,8 @@ class Availability(models.Model):
 		return reverse('availability-detail', args=[str(self.id)])
 
 class Employee(models.Model):
-	user = models.OneToOneField(User, null = True, on_delete = models.CASCADE)
-	availability = models.OneToOneField(Availability, null = True, on_delete=models.CASCADE, unique = True, default = None)
+	user = models.OneToOneField(User, null = False, on_delete = models.CASCADE)
+	availability = models.OneToOneField(Availability, null = False, on_delete=models.CASCADE)
 
 	STATUS = (
 	('Full-Time','Full-time'),

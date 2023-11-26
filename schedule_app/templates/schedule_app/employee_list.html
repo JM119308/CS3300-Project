@@ -5,6 +5,8 @@
 {% if employee_list %}
 <ul>
 <div class="col">
+    <p><a class="btn btn-warning" href="{%url 'register_page' %}?next={{request.path}}" role="button"> Register new employee </a></p>
+
     {% for employee in employee_list %}
 
     <div class="col-md-3">
