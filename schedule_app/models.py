@@ -38,8 +38,8 @@ class Employee(models.Model):
 	('Full-Time','Full-time'),
 	('Part-Time', 'Part-time')  
 	)
-	name = models.CharField(max_length = 200)
-	phone = models.CharField(max_length = 200)
+	name = models.CharField(max_length = 200, blank = True)
+	phone = models.CharField(max_length = 200, blank = True)
 	status = models.CharField(max_length=200, choices=STATUS, blank = True)	
 
 
@@ -49,7 +49,7 @@ class Employee(models.Model):
 		return reverse('employee-detail', args=[str(self.id)])	
 
 class Week(models.Model):
-	weekDate = models.CharField(max_length = 200)
+	weekDate = models.CharField(max_length = 200, blank = False)
 
 	def __str__(self):
 		return self.weekDate

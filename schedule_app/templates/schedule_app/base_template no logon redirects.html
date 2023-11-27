@@ -1,0 +1,113 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load custom_tags %}
+
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<title>Scheduler 5000</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+ <style>
+.cosmiclatte {
+  background-color: #fff8e7;
+} 
+.cosmicdark {
+  background-color: #e5dfcf;
+} 
+
+.grey {
+  background-color: #7a7a7a;
+}
+</style>
+
+</head>
+
+<body data-bs-theme="light" >
+
+
+
+<!--Dark mode compatible navbar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<div class="container-fluid">
+<img src="{% static 'images/scheduler_5000.png' %}">
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+<ul class="navbar-nav">
+<li class="nav-item">
+
+
+
+{% if user.is_authenticated %}
+{% if user|has_group:"manager_role" %}
+<a class="nav-link" href="{% url 'manager' %}">Home</a> 
+</li>
+{% else %}
+<a class="nav-link" href="{% url 'weeks' %}">Home</a> 
+</li>
+{% endif %}
+<li class="nav-item">
+<a class="nav-link" href="{% url 'user_page' %}" >Profile</a>
+</li> 
+{% else %}
+
+<a class="nav-link" href="{% url 'index' %}">Home</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="{%url 'login' %}?next={{request.path}}" >Profile</a>
+</li> 
+{% endif  %}
+
+
+
+{% if user.is_authenticated %}
+<li>
+<a class ="nav-link" href="{%url 'logout' %}?next={{request.path}}">Logout {{user}}</a>
+</li>
+{% else %}
+<li>
+<a class ="nav-link" href="{%url 'login' %}?next={{request.path}}">Login </a>
+</li>
+{% endif  %}
+
+	<li class="form-check form-switch mx-4">
+	<p>Dark Mode<input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked"  onclick="toggleFunction()">
+	</p>
+	</li>
+</ul>
+</div>
+</div>
+</nav> 
+ 
+
+
+<!-- add block content from html template -->
+{% block content %}
+
+{% endblock %}
+ <script>
+
+        // Check the saved theme in local storage and apply it
+        document.addEventListener("DOMContentLoaded", function() {
+            const theme = localStorage.getItem("theme");
+            if (theme) {
+                document.body.dataset.bsTheme = theme;
+                document.getElementById('flexSwitchCheckChecked').checked = theme === 'dark';
+            }
+        });
+
+        // Toggle between light and dark themes and store the preference
+        function toggleFunction() {
+            var element = document.body;
+            element.dataset.bsTheme = element.dataset.bsTheme === "light" ? "dark" : "light";
+            localStorage.setItem("theme", element.dataset.bsTheme);
+        }
+   </script>
+
+
+</body>
+</html>

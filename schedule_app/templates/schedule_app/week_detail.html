@@ -1,35 +1,129 @@
-{% extends "schedule_app/base_template.html" %}
+{% extends 'schedule_app/base_template.html' %}
+{% block content %}
 {% load custom_tags %}
 
-{% block content %}
-<style>
-    .left-align {
-        text-align: left;
-    }
-    .availability-label {
-        display: inline-block;
-        width: 200px; /* Adjust the width as needed */
-    }
-</style>
-
-<h2>Week: {{ week.weekDate }} </h2>
 
 
-<p><strong><h3>Schedules:</h3></strong></p>
-<p><a class="btn btn-secondary" href="{% url 'weeks'%}" role="button">Back</a> 
-{% if user|has_group:"manager_role" %}
-<a class="btn btn-secondary" href="{% url 'create_schedule' week.pk %}" role="button">Create</a>
+<div class = "container px-2">
+  <p></p>
+<a class="btn btn-secondary" href="{% url 'weeks'%}" role="button">Back</a>
+
+<div class="row" style="padding-top: 50px; padding-bottom: 8px;">
+  <h2>Week: {{ week.weekDate }} </h2>
+  <div class="col border black-line light_red"><b>Sun</b></div>
+  <div class="col border black-line light_red"><b>Mon</b></div>
+  <div class="col border black-line light_red"><b>Tue</b></div>
+  <div class="col border black-line light_red"><b>Wed</b></div>
+  <div class="col border black-line light_red"><b>Thu</b></div>
+  <div class="col border black-line light_red"><b>Fri</b></div>
+  <div class="col border black-line light_red"><b>Sat</b></div>
+  <div></div>
+
+  
+<div class="col border black-line text-truncate scrollable-content">
+    {% for schedule in schedule_list %}
+        {% if schedule.week == week and schedule.sunday_start != '' %}        
+            <p style="display: flex; justify-content: space-between;">
+                <span>{{ schedule.employee.name }}:</span>
+                <span>{{ schedule.sunday_start }} - {{ schedule.sunday_end }}</span>
+            </p>
+      
+        {% endif %}
+    {% endfor %}
+</div>
+
+  <div class="col border black-line text-truncate scrollable-content">
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.monday_start != '' %}
+ <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.monday_start }} - {{ schedule.monday_end }}</span>
 </p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</div>
+  <div class="col border black-line text-truncate scrollable-content">
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.tuesday_start != '' %}
+  <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.tuesday_start }} - {{ schedule.tuesday_end }}</span>
+</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+  </div>
+  <div class="col border black-line text-truncate scrollable-content">
+
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.wednesday_start != '' %}
+ <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.wednesday_start }} - {{ schedule.wednesday_end }}</span>
+</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</div>
+  <div class="col border black-line text-truncate scrollable-content">
+
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.thursday_start != '' %}
+ <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.thursday_start }} - {{ schedule.thursday_end }}</span>
+</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+  </div>
+  <div class="col border black-line text-truncate scrollable-content">
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.friday_start != '' %}
+ <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.friday_start }} - {{ schedule.friday_end }}</span>
+</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</div>
+  <div class="col border black-line text-truncate scrollable-content">
+
+  {% for schedule in schedule_list %}
+  {% if schedule.week == week %}
+  {% if schedule.saturday_start != '' %}
+ <p style="display: flex; justify-content: space-between;">
+    <span>{{ schedule.employee.name }}:</span>
+    <span>{{ schedule.saturday_start }} - {{ schedule.saturday_end }}</span>
+</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+  </div>
+</div>
+</div>
+
+<div class = "container px-10">
+<p><strong><h3>On Staff:</h3></strong></p>
+{% if user|has_group:"manager_role" %}    
+<a class="btn btn-secondary" href="{% url 'create_schedule' week.pk %}" role="button">Add</a>
 {% endif %}
 <div class="col">
     {% for schedule in schedule_list %}
     {% if schedule.week == week %}
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="card my-3">
             <div class="card-body">
-                <h5 class="card-title">{{ schedule.employee.name }}'s schedule</h5>
+                <h5 class="card-title">{{ schedule.employee.name }}</h5>
                 <p><a class="btn btn-primary" href="{{ schedule.get_absolute_url }}" role="button">View</a>
-                    
+
                 {% if user|has_group:"manager_role" %}
                 <a class="btn btn-warning" href="{% url 'update_schedule' schedule.id %}" role="button">Edit</a>
                 <a class="btn btn-success" href="{% url 'availability-detail' schedule.employee.availability.id %}" role="button">Availability</a>
@@ -41,5 +135,5 @@
     {% endif %}
     {% endfor %}
 </div>
-
+</div>
 {% endblock %}

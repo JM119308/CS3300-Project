@@ -242,16 +242,16 @@ def registerPage(request):
 
             # Create an Employee instance and link it to the user
             employee, created = Employee.objects.get_or_create(user=user, defaults={'name': form.cleaned_data['employee_name']})
-            print("New Employee created:", employee)
+            #print("New Employee created:", employee)
             
             # Print for debugging
-            print("New Employee created:", employee)
+            #print("New Employee created:", employee)
 
             # Create an Availability instance and link it to the employee if it's a new employee
             availability = Availability.objects.create(owner=user.username)
 
             # Print for debugging
-            print("New Availability created:", availability)
+            #print("New Availability created:", availability)
 
             employee.availability = availability
             employee.save()
@@ -283,3 +283,9 @@ def userPage(request):
             form.save()
     context = {'availability': availability, 'form':form}
     return render(request,'schedule_app/user.html', context)
+
+
+def prototype(request):
+
+# Render the HTML template index.html with the data in the context variable.
+   return render( request, 'schedule_app/schedule_proto.html')

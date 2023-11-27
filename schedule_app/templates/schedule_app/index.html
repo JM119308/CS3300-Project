@@ -5,5 +5,14 @@
 <h1>Welcome to the Scheduler 5000</h1>
 {% if user.is_authenticated %}
 <p> View Upcomming Weeks</p>
+<div class="col-md-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <h5 class="card-title">Manage Schedules</h5>
+                <p><a class="btn btn-primary" href="{% url 'weeks' %}" role="button">Go</a></p>
+
+            </div>
+        </div>
+    </div>
 {% endif %}
 {% endblock %}
