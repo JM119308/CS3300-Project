@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'schedule_app',
     'bootstrap5',
+
 ]
+
 # Add support for authenticating users
 AUTHENTICATION_BACKENDS = [
 'django.contrib.auth.backends.ModelBackend',

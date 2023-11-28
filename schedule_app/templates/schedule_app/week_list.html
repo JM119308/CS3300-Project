@@ -20,10 +20,12 @@
             <div class="card-body " >
                 <h5 class="card-title">{{ week.weekDate }}</h5>
                 <p><a class="btn btn-primary" href="{{ week.get_absolute_url }}" role="button">View</a>
+
                 {% if user|has_group:"manager_role" %}
                 <a class="btn btn-warning" href="{% url 'update_week' week.id %}" role="button">Edit</a>
             	<a class="btn btn-danger" href="{% url 'delete_week' week.id %}" role="button">Delete</a></p>
                 {% endif %}
+                
             </div>
         </div>
     </div>

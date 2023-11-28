@@ -75,7 +75,7 @@ class UserCreationTest(LiveServerTestCase):
         password_input.send_keys('cL345214')
         password_input.send_keys(Keys.RETURN)
 
-        time.sleep(5)
+      
         # Check if the login was successful
         body_text = self.selenium.find_element(By.TAG_NAME, 'h3').text
         self.assertIn('Welcome, john', body_text)
@@ -180,7 +180,7 @@ class TestCreateWeekAndSchedule(LiveServerTestCase):
         # Submit the form
         create_schedule_button = self.selenium.find_element(By.CSS_SELECTOR, '[type="submit"]')
         create_schedule_button.click()
-        time.sleep(5)
+    
 
         # Check if the employee was added to schedule
         body_text = self.selenium.find_element(By.TAG_NAME, 'h5').text

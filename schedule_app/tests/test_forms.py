@@ -10,7 +10,7 @@ class TestForms(SimpleTestCase):
 
 		self.assertTrue(form.is_valid())
 
-	def test_expense_form_no_data(self):
+	def test_week_form_no_data(self):
 
 		form = WeekForm(data = {})
 
