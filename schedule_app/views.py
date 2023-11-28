@@ -285,7 +285,33 @@ def userPage(request):
     return render(request,'schedule_app/user.html', context)
 
 
-def prototype(request):
+'''def prototype(request):
 
 # Render the HTML template index.html with the data in the context variable.
-   return render( request, 'schedule_app/schedule_proto.html')
+   return render( request, 'schedule_app/schedule_proto.html')'''
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager_role'])
+def updateEmployee(request, employee_id):
+    employee = get_object_or_404(Employee, pk=employee_id)
+
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, instance=employee)
+        if form.is_valid():
+            form.save()
+            # Redirect back to the employee detail page
+            return redirect('employees')
+    else:
+        form = EmployeeForm(instance=employee)  # Pass the instance to pre-fill the form
+
+    context = {'form': form, 'employee': employee}
+    return render(request, 'schedule_app/update_employee.html', context)
+
+'''@login_required(login_url='login')
+@allowed_users(allowed_roles=['manager_role'])
+def deleteWeek(request, pk):
+    week_instance = get_object_or_404(Week, pk=pk)
+    if request.method == 'POST':
+        week_instance.delete()
+        return redirect('weeks')  # Redirect to a success URL after deleting the week
+    return render(request, 'schedule_app/delete_week.html', {'week': week_instance})'''

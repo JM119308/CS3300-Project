@@ -6,8 +6,9 @@ path('', views.index, name = 'index'),
 path('manager/home', views.manager, name = 'manager'),
 path('employees/', views.EmployeeListView.as_view(), name= 'employees'),
 path('employees/<int:pk>', views.EmployeeDetailView.as_view(), name='employee-detail'),
+path('update_employee/<int:employee_id>/update', views.updateEmployee, name='update_employee'),
 
-path('prototype/', views.prototype, name = 'prototype'),
+#path('prototype/', views.prototype, name = 'prototype'),
 
 path('schedules', views.ScheduleListView.as_view(), name='schedules'),
 path('schedules/<int:pk>', views.ScheduleDetailView.as_view(), name='schedule-detail'),

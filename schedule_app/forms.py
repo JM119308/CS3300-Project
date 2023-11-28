@@ -55,8 +55,7 @@ class CreateUserForm(UserCreationForm):
 class EmployeeForm(ModelForm):
 	class Meta:
 		model = Employee
-		fields = '__all__'
-		exclude = ['user', 'availability']
+		fields = ['name', 'phone','status']
 
 	#Prefill week into the form
 	'''def __init__(self, *args, **kwargs):

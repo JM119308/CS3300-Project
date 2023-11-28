@@ -5,7 +5,8 @@
 {% if employee_list %}
 <ul>
 <div class="col">
-    <p><a class="btn btn-warning" href="{%url 'register_page' %}?next={{request.path}}" role="button"> Register new employee </a></p>
+    <p><a class="btn btn-secondary" href="{%url 'manager' %}" role="button">Back to dashboard </a>
+        <a class="btn btn-secondary" href="{%url 'register_page' %}?next={{request.path}}" role="button"> Register new employee </a></p>
 
     {% for employee in employee_list %}
 
@@ -13,7 +14,9 @@
         <div class="card my-3">
             <div class="card-body">
                 <h5 class="card-title">{{ employee.name }}</h5>
-                <p><a class="btn btn-primary" href="{{ employee.get_absolute_url }}" role="button">View</a></p>
+                <p><a class="btn btn-primary" href="{{ employee.get_absolute_url }}" role="button">View</a>
+
+                <a class="btn btn-warning" href="{% url 'update_employee' employee.id %}" role="button">Edit</a></p>
             </div>
         </div>
     </div>
